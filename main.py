@@ -93,21 +93,27 @@ def save_image_comparison(original, processed, out_path, is_gray, title=""):
 def plot_and_save_histograms(original, processed, out_path, is_gray):
     n = 50
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-
+    axes[0].set_xlim(0, 255)
+    axes[1].set_xlim(0, 255)
     if is_gray:
-        orig_hist, bins = np.histogram(original.flatten(), bins=n, range=(0, 1))
-        proc_hist, _ = np.histogram(processed.flatten(), bins=n, range=(0, 1))
+        orig = (original * 255).astype(np.uint8)
+        proc = (processed * 255).astype(np.uint8)
+
+        orig_hist, bins = np.histogram(orig.flatten(), bins=256, range=(0, 255))
+        proc_hist, _ = np.histogram(proc.flatten(), bins=256, range=(0, 255))
 
         axes[0].plot(bins[:-1], orig_hist)
         axes[1].plot(bins[:-1], proc_hist)
     else:
-        colors = ["r", "g", "b"]
-        for c, col in enumerate(colors):
+        orig = (original * 255).astype(np.uint8)
+        proc = (processed * 255).astype(np.uint8)
+
+        for c, col in enumerate(["r", "g", "b"]):
             orig_hist, bins = np.histogram(
-                original[:, :, c].flatten(), bins=n, range=(0, 1)
+                orig[:, :, c].flatten(), bins=256, range=(0, 255)
             )
             proc_hist, _ = np.histogram(
-                processed[:, :, c].flatten(), bins=n, range=(0, 1)
+                proc[:, :, c].flatten(), bins=256, range=(0, 255)
             )
 
             axes[0].plot(bins[:-1], orig_hist, color=col)
