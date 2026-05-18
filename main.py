@@ -25,7 +25,7 @@ def remove_noise(image):
     return blurred.astype(np.float32)
 
 
-def gamma_correction(image, gamma_value=0.6):
+def gamma_correction(image, gamma_value=2):
 
     C = np.power(image, gamma_value)
     return np.clip(C, 0.0, 1.0).astype(np.float32)
